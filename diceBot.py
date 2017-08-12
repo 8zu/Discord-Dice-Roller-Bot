@@ -21,16 +21,6 @@ bot = commands.Bot(command_prefix='!', description="A bot to handle all your RPG
 def is_me(m):
     return m.author == bot.user
 
-# Determines if the value can be converted to an integer
-# Parameters: s - input string
-# Returns: boolean. True if can be converted, False if it throws an error.
-def is_num(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
-
 # Roll a list of random variables to their values
 def evaluate_randvars(randvars: List[str]): # -> List[int]
     def roll_single(randvar):
@@ -67,7 +57,7 @@ def test_threshold(cmd: str, threshold: int):
 # hit [number that must be exceeded to count as a success], modifier [amount to add to/subtract from total],
 # threshold [number of successes needed to be a win]
 # Returns: String with results
-def test_hit(cmd: str, hit_thresh: int, success_thresh=None):
+def test_hit(cmd: str, hit_thresh: int):
     symbols = cmd.split("+")
     dices = evaluate_randvars(filter(lambda s: "d" in s, symbols))
     modifier = sum(evaluate_randvars(filter(lambda s: "d" not in s, symbols)))
@@ -77,13 +67,7 @@ def test_hit(cmd: str, hit_thresh: int, success_thresh=None):
     total = sum(1 for n in numbers if n >= hit_thresh)
     result = " + ".join(f"**{n}**" if n >= hit_thresh else str(n)
                         for n in numbers)
-    result += f" = {total}"
-
-    if success_thresh is not None:
-        if total >= threshold:
-            result += " meets or beats the {success_thresh} threshold. ***Success***"
-        else:
-            result += " does not meet the {success_thresh} threshold. ***Failure***"
+    result += f" = {total} hits"
     return result
 
 @bot.event
