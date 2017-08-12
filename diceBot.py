@@ -95,8 +95,8 @@ async def on_ready():
 
 # Parse !roll verbiage
 @bot.command(pass_context=True,description='Rolls dice.\nExamples:\nd  Rolls a d20.\nd100  Rolls a d100.\n3d6  Rolls 3 d6 dice and returns total.\nModifiers:\n! Hit success threshold. 3d6!5 Counts number of rolls that are greater than 5.\n+: Modifier. 3d6+3 or 3d6-3. Adds +/-3 to the result.\n> Threshold. d100>30 returns success if roll is greater than or equal to 30.\n\nSyntax: Expr = !roll Command\nCommand = RandvarList (HitThresh) (Threshold)\nRandvarList = Nil | Randvar RandvarList\nRandvar = int | DiceExpr\nDiceExpr = (num)d(type). num defaults to 1, type defaults to 20')
-aync def roll(ctx, cmd : str = ""):
-    numbers, hit, threshold = [], None, None
+async def roll(ctx, cmd : str = ""):
+    numbers, hit_thresh, threshold = [], None, None
     # author: Writer of discord message
     author = ctx.message.author.split('#')[0]
 
@@ -111,18 +111,18 @@ aync def roll(ctx, cmd : str = ""):
             except:
                 raise ValueError("Threshold value format error. Must be integer")
         elif '!' in cmd:
-            cmd, hit = cmd.split('!')
+            cmd, hit_thresh = cmd.split('!')
             try:
-                hit = int(hit)
+                hit_thresh = int(hit_thresh)
             except:
                 raise ValueError("Hit value format error. Must be integer")
 
-        if hit is not None:
-            await bot.say(f"{author} rolled {cmd} = " + test_hit(cmd, hit, threshold))
+        if hit_thresh is not None:
+            await bot.say(f"{author} rolled {cmd} = " + test_hit(cmd, hit_thresh))
         elif threshold is not None:
             await bot.say(f"{author} rolled {cmd}: " + test_threshold(cmd, threshold))
         else:
-            numbers = rolldice(cmd.split('+'))
+            numbers = evaluate_randvars(cmd.split('+'))
             results = " + ".join(map(str, numbers))
             await bot.say(f"{author} rolls {cmd} = {results} = {sum(numbers)}")
     except ValueError as err:
@@ -134,7 +134,7 @@ aync def roll(ctx, cmd : str = ""):
 async def purge(ctx):
     channel = ctx.message.channel
     deleted = await bot.purge_from(channel, limit=100, check=is_me)
-    await bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
+    await bot.send_message(channel, f'Deleted {len(deleted)} message(s)')
 
 # Follow this helpful guide on creating a bot and adding it to your server.
 # https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
