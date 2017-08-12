@@ -63,7 +63,7 @@ def test_threshold(cmd: str, threshold: int):
         return f"***Failure***: {cmd} = {n} < {threshold}"
 
 # Rolls a set of die and returns either number of hits or the total amount
-# Parameters: num_of_dice [Number of dice to roll], dice_type[die type (e.g. d8, d6), 
+# Parameters: num_of_dice [Number of dice to roll], dice_type[die type (e.g. d8, d6),
 # hit [number that must be exceeded to count as a success], modifier [amount to add to/subtract from total],
 # threshold [number of successes needed to be a win]
 # Returns: String with results
@@ -87,7 +87,7 @@ def test_hit(cmd: str, hit_thresh: int, success_thresh=None):
     return result
 
 @bot.event
-@asyncio.coroutine 
+@asyncio.coroutine
 def on_ready():
     print('Logged in as')
     print(bot.user.name)
@@ -95,7 +95,7 @@ def on_ready():
     print('------')
 
 # Parse !roll verbiage
-@bot.command(pass_context=True,description='Rolls dice.\nExamples:\n100  Rolls 1-100.\n50-100  Rolls 50-100.\n3d6  Rolls 3 d6 dice and returns total.\nModifiers:\n! Hit success. 3d6!5 Counts number of rolls that are greater than 5.\nmod: Modifier. 3d6mod3 or 3d6mod-3. Adds 3 to the result.\n> Threshold. 100>30 returns success if roll is greater than or equal to 30.\n\nFormatting:\nMust be done in order.\nSingle die roll: 1-100mod2>30\nMultiple: 5d6!4mod-2>2')
+@bot.command(pass_context=True,description='Rolls dice.\nExamples:\nd  Rolls a d20.\nd100  Rolls a d100.\n3d6  Rolls 3 d6 dice and returns total.\nModifiers:\n! Hit success threshold. 3d6!5 Counts number of rolls that are greater than 5.\n+: Modifier. 3d6+3 or 3d6-3. Adds +/-3 to the result.\n> Threshold. d100>30 returns success if roll is greater than or equal to 30.\n\nSyntax: Expr = !roll Command\nCommand = RandvarList (HitThresh) (Threshold)\nRandvarList = Nil | Randvar RandvarList\nRandvar = int | DiceExpr\nDiceExpr = (num)d(type). num defaults to 1, type defaults to 20')
 @asyncio.coroutine
 def roll(ctx, cmd : str = ""):
     numbers, hit, threshold = [], None, None
@@ -131,7 +131,7 @@ def roll(ctx, cmd : str = ""):
         # Display error message to channel
         yield from bot.say(err)
 
-#Bot command to delete all messages the bot has made.        
+#Bot command to delete all messages the bot has made.
 @bot.command(pass_context=True,description='Deletes all messages the bot has made')
 @asyncio.coroutine
 def purge(ctx):
@@ -139,6 +139,6 @@ def purge(ctx):
     deleted = yield from bot.purge_from(channel, limit=100, check=is_me)
     yield from bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
 
-# Follow this helpful guide on creating a bot and adding it to your server. 
+# Follow this helpful guide on creating a bot and adding it to your server.
 # https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
 bot.run('token')
