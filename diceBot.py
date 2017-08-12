@@ -88,6 +88,8 @@ async def roll(ctx, cmd : str = ""):
         if cmd == "":
             raise ValueError("Please enter some dice")
 
+        cmd = cmd.replace('-', '+-').replace('++-', '+-')
+
         if '>' in cmd:
             cmd, threshold = cmd.split('>')
             try:
