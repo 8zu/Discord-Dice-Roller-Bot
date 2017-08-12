@@ -87,8 +87,7 @@ def test_hit(cmd: str, hit_thresh: int, success_thresh=None):
     return result
 
 @bot.event
-@asyncio.coroutine
-def on_ready():
+async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -96,8 +95,7 @@ def on_ready():
 
 # Parse !roll verbiage
 @bot.command(pass_context=True,description='Rolls dice.\nExamples:\nd  Rolls a d20.\nd100  Rolls a d100.\n3d6  Rolls 3 d6 dice and returns total.\nModifiers:\n! Hit success threshold. 3d6!5 Counts number of rolls that are greater than 5.\n+: Modifier. 3d6+3 or 3d6-3. Adds +/-3 to the result.\n> Threshold. d100>30 returns success if roll is greater than or equal to 30.\n\nSyntax: Expr = !roll Command\nCommand = RandvarList (HitThresh) (Threshold)\nRandvarList = Nil | Randvar RandvarList\nRandvar = int | DiceExpr\nDiceExpr = (num)d(type). num defaults to 1, type defaults to 20')
-@asyncio.coroutine
-def roll(ctx, cmd : str = ""):
+aync def roll(ctx, cmd : str = ""):
     numbers, hit, threshold = [], None, None
     # author: Writer of discord message
     author = ctx.message.author.split('#')[0]
@@ -120,24 +118,23 @@ def roll(ctx, cmd : str = ""):
                 raise ValueError("Hit value format error. Must be integer")
 
         if hit is not None:
-            yield from bot.say(f"{author} rolled {cmd} = " + test_hit(cmd, hit, threshold))
+            await bot.say(f"{author} rolled {cmd} = " + test_hit(cmd, hit, threshold))
         elif threshold is not None:
-            yield from bot.say(f"{author} rolled {cmd}: " + test_threshold(cmd, threshold))
+            await bot.say(f"{author} rolled {cmd}: " + test_threshold(cmd, threshold))
         else:
             numbers = rolldice(cmd.split('+'))
             results = " + ".join(map(str, numbers))
-            yield from bot.say(f"{author} rolls {cmd} = {results} = {sum(numbers)}")
+            await bot.say(f"{author} rolls {cmd} = {results} = {sum(numbers)}")
     except ValueError as err:
         # Display error message to channel
-        yield from bot.say(err)
+        await bot.say(err)
 
 #Bot command to delete all messages the bot has made.
 @bot.command(pass_context=True,description='Deletes all messages the bot has made')
-@asyncio.coroutine
-def purge(ctx):
+async def purge(ctx):
     channel = ctx.message.channel
-    deleted = yield from bot.purge_from(channel, limit=100, check=is_me)
-    yield from bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
+    deleted = await bot.purge_from(channel, limit=100, check=is_me)
+    await bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
 
 # Follow this helpful guide on creating a bot and adding it to your server.
 # https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
