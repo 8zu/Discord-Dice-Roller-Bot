@@ -23,7 +23,7 @@ Supported rolls are
 - !roll d8 - Rolls one 8-sided die
 - !roll 3d6 - Rolls 3 6-sided die
 
-#Modifiers
+## Modifiers
 - `!n` Hit mode (n>0). `!roll 10d6!5` will give you the number of times the dice rolls 5 or higher.
 - `>n` Threshold mode (n>0). `!roll d100>50` will say "Success" if result is over 50 or "Failure" if not.
 - `+/-` Modifier. Used with any roll. Adds or substracts to roll. !roll d100+4 will add 4 to the roll. Currently to substract you need to 
