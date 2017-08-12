@@ -82,7 +82,7 @@ async def on_ready():
 async def roll(ctx, cmd : str = ""):
     numbers, hit_thresh, threshold = [], None, None
     # author: Writer of discord message
-    author = ctx.message.author.split('#')[0]
+    author = str(ctx.message.author).split('#')[0]
 
     try:
         if cmd == "":
