@@ -8,7 +8,7 @@ This bot is extended from [Discord.py](https://github.com/Rapptz/discord.py/). I
 This requires Python 3.6+.
 
 # Usage
-1. Follow the directions [here] (https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) to create a bot token.
+1. Follow the directions [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) to create a bot token.
 2. Add the bot to the servers you want.
 3. Place the token in the last line of the script.
 4. Launch script.
